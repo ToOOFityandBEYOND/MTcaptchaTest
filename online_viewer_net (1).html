@@ -1,93 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>MTCaptcha Test (Fixed)</title>
+  <meta charset="UTF-8">
+  <title>MTCaptcha Test</title>
 
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; }
-  #mtcaptcha-container { width: 320px; margin-bottom: 12px; }
-  #result { margin-top: 12px; color: #c00; }
-</style>
+  <!-- MTCaptcha Config -->
+  <script>
+    var mtcaptchaConfig = {
+      sitekey: "MTPublic-MNY8Xo0SG"
+    };
+  </script>
 
-<!-- MTCaptcha required -->
-<script>
-  // OFFICIAL test key for localhost
-  var mtcaptchaConfig = {
-    sitekey: "MTPublic-MNY8Xo0SG", 
-    render: "auto",                // auto works better on mobile
-    theme: "light",
-    "lang": "en",
-    "fallback": "iframe"           // IMPORTANT: fixes Brave blocking
-  };
-</script>
+  <!-- MTCaptcha Script -->
+  <script src="https://service.mtcaptcha.com/mtcv1/client/mtcaptcha.min.js" async></script>
 
-<!-- Recommended single loader instead of 2 scripts -->
-<script async src="https://service.mtcaptcha.com/mtcv1/client/mtcaptcha.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f5f5f5;
+    }
 
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      width: 350px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>MTCaptcha – Working Localhost Test</h2>
+  <div class="container">
+    <h3>Real MTCaptcha Test</h3>
 
-<form id="demoForm">
-  <div id="mtcaptcha-container" class="mtcaptcha"></div>
+    <form>
+      <!-- Captcha Widget -->
+      <div class="mtcaptcha"></div>
 
-  <input type="hidden" id="mtcaptcha-verifiedtoken" name="mtcaptcha-verifiedtoken">
-
-  <br>
-  <button type="submit">Submit</button>
-  <button type="button" id="refreshBtn">Refresh CAPTCHA</button>
-</form>
-
-<p id="result"></p>
-
-
-<script>
-// Wait until MTCaptcha API is fully ready
-function mtReady(cb) {
-  if (window.mtcaptcha && mtcaptcha.getVerifiedToken) return cb();
-  const t = setInterval(() => {
-    if (window.mtcaptcha && mtcaptcha.getVerifiedToken) {
-      clearInterval(t);
-      cb();
-    }
-  }, 100);
-}
-
-mtReady(() => {
-  // Update token every 300ms
-  setInterval(() => {
-    let token = mtcaptcha.getVerifiedToken();
-    if (token) {
-      document.getElementById("mtcaptcha-verifiedtoken").value = token;
-    }
-  }, 300);
-
-  // Refresh button
-  document.getElementById("refreshBtn").onclick = () => {
-    if (mtcaptcha.reset) {
-      mtcaptcha.reset();    // Simple, correct reset call
-      document.getElementById("result").textContent = "CAPTCHA refreshed.";
-    } else {
-      document.getElementById("result").textContent = "MTCaptcha not ready.";
-    }
-  };
-
-  // Form submit check
-  document.getElementById("demoForm").addEventListener("submit", (e) => {
-    let token = document.getElementById("mtcaptcha-verifiedtoken").value;
-    if (!token) {
-      e.preventDefault();
-      document.getElementById("result").textContent = "Please solve the CAPTCHA.";
-    } else {
-      document.getElementById("result").textContent = "Form submitted!";
-    }
-  });
-
-});
-</script>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 
 </body>
 </html>
